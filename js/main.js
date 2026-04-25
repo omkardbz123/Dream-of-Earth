@@ -13,25 +13,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // Safety: ensure menu music and fullscreen starts on first interaction
     let firstInteractionDone = false;
     const handleFirstInteraction = () => {
-        if (firstInteractionDone) return;
+        // Play music on first interaction regardless
         playMusic('dream-entrance', true);
         
-        // Request Fullscreen on the very first tap
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(e => console.warn(e));
-        } else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen().catch(e => console.warn(e));
+        // If already fullscreen, we don't need to request it again
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+            firstInteractionDone = true;
+            return;
         }
 
-        // Attempt to lock orientation
-        if (screen.orientation && screen.orientation.lock) {
-            screen.orientation.lock('landscape').catch(e => console.warn(e));
+        // Request Fullscreen
+        let fsPromise;
+        if (document.documentElement.requestFullscreen) {
+            fsPromise = document.documentElement.requestFullscreen();
+        } else if (document.documentElement.webkitRequestFullscreen) {
+            fsPromise = document.documentElement.webkitRequestFullscreen();
         }
-        
-        firstInteractionDone = true;
+
+        if (fsPromise) {
+            fsPromise.then(() => {
+                // Attempt to lock orientation once fullscreen succeeds
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(e => console.warn(e));
+                }
+                firstInteractionDone = true;
+            }).catch(e => console.warn("Fullscreen failed:", e));
+        }
     };
+
+    // Use 'click' and 'touchend' as they are valid user gestures for Fullscreen API
+    // 'touchstart' is often rejected by modern mobile browsers for fullscreen.
     document.addEventListener('click', handleFirstInteraction);
-    document.addEventListener('touchstart', handleFirstInteraction, {once: true});
+    document.addEventListener('touchend', handleFirstInteraction);
 
     // Language selection
     langBtns.forEach(btn => {
