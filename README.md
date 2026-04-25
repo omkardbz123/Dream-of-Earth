@@ -1,6 +1,8 @@
 # Dream of Earth 🌍
 
-**[Play Live Game Here](https://omkardbz123.github.io/Dream-of-Earth/)**
+**Play Live Game Here:**
+- ⚡ **[Super Fast (Cloudflare Hosted)](https://dream-of-earth.omkardbz123.workers.dev/)**
+- 🐢 **[Standard (GitHub Hosted)](https://omkardbz123.github.io/Dream-of-Earth/)**
 
 **Dream of Earth** is an immersive, narrative-driven interactive web game that explores the profound connection between human choices and the natural world. Players step into the shoes of Maya, navigating a vivid dreamscape where she meets various animals—from Zara the Lion to Queen Aria the Bee. 
 
@@ -14,7 +16,7 @@ Every decision made in the game directly impacts the narrative, the environment,
 - **Save & Share:** At the end of the journey, players receive a personalized scorecard detailing their choices which can be downloaded and shared.
 
 ## How to Play 🎮
-Simply visit the **[Live Link](https://omkardbz123.github.io/Dream-of-Earth/)** on your browser. No installation is required.
+Simply visit either of the live links above on your browser. No installation is required. For the best and fastest experience, we recommend the **[Cloudflare Hosted](https://dream-of-earth.omkardbz123.workers.dev/)** version!
 
 ## Technologies Used 🛠️
 - **HTML5 & CSS3:** For structuring and beautifully styling the game interface with smooth transitions and glassmorphism elements.
