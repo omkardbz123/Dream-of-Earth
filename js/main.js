@@ -1,6 +1,6 @@
 import { initEngine, enterScene } from './engine.js';
 import { setLanguage } from './state.js';
-import { playMusic, playSFX } from './audio.js';
+import { playMusic, stopMusic, playSFX } from './audio.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initEngine();
@@ -11,17 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const langBtns = document.querySelectorAll('.btn-lang');
     
     // Safety: ensure menu music and fullscreen starts on first interaction
-    let firstInteractionDone = false;
     const handleFirstInteraction = () => {
-        // Start title screen music on the first valid user gesture
-        playMusic('main-menu', true);
-        
-        // If already fullscreen, we don't need to request it again
-        if (document.fullscreenElement || document.webkitFullscreenElement) {
-            firstInteractionDone = true;
-            return;
-        }
+        // Remove listeners immediately — main-menu should ONLY start once
+        document.removeEventListener('click', handleFirstInteraction);
+        document.removeEventListener('touchend', handleFirstInteraction);
 
+        // Start title screen music now that we have a valid user gesture
+        playMusic('main-menu');
+        
         // Request Fullscreen
         let fsPromise;
         if (document.documentElement.requestFullscreen) {
@@ -36,13 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (screen.orientation && screen.orientation.lock) {
                     screen.orientation.lock('landscape').catch(e => console.warn(e));
                 }
-                firstInteractionDone = true;
             }).catch(e => console.warn("Fullscreen failed:", e));
         }
     };
 
     // Use 'click' and 'touchend' as they are valid user gestures for Fullscreen API
-    // 'touchstart' is often rejected by modern mobile browsers for fullscreen.
     document.addEventListener('click', handleFirstInteraction);
     document.addEventListener('touchend', handleFirstInteraction);
 
@@ -65,14 +60,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Start button
+    // Start button — stop menu music and begin the game
     startBtn.addEventListener('click', () => {
-        playSFX('choice-select'); // Add click sound
+        playSFX('choice-select');
+        stopMusic(); // Stop main-menu — it will NEVER play again
         
         titleScreen.style.opacity = '0';
         setTimeout(() => {
             titleScreen.classList.add('hidden');
-            enterScene('prologue');
+            enterScene('prologue'); // prologue will start dream-entrance
         }, 1000);
     });
 });
