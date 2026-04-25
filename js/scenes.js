@@ -7,7 +7,7 @@ export const SCENES = {
         id: 'prologue',
         title: 'The Dream Begins',
         background: 'maya-room-night',
-        music: 'main-menu',
+        music: 'dream-entrance',
         explore: { enabled: false },
         steps: [
             { type: 'narration', text: "The house is quiet. The only sound is the slow breathing of a sleeping world." },

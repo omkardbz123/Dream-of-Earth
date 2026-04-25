@@ -4,7 +4,7 @@ import { playMusic, playSFX } from './audio.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initEngine();
-    playMusic('dream-entrance', true);
+    // DO NOT play music here — browsers block audio before user interaction
 
     const titleScreen = document.getElementById('title-screen');
     const startBtn = document.getElementById('start-btn');
@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Safety: ensure menu music and fullscreen starts on first interaction
     let firstInteractionDone = false;
     const handleFirstInteraction = () => {
-        // Play music on first interaction regardless
-        playMusic('dream-entrance', true);
+        // Start title screen music on the first valid user gesture
+        playMusic('main-menu', true);
         
         // If already fullscreen, we don't need to request it again
         if (document.fullscreenElement || document.webkitFullscreenElement) {

@@ -1,5 +1,5 @@
 import { getState, setState, recordChoice, addPoints, getScenes, getEndingType } from './state.js';
-import { playMusic, playSFX, stopSFX } from './audio.js';
+import { playMusic, playSFX, stopSFX, getCurrentMusic } from './audio.js';
 import { startExplorePhase, disableControls, enableControls, initPlayer } from './player.js';
 import { buildFinalScene, buildReflectionScene, buildEpilogueScene } from './endings.js';
 
@@ -142,9 +142,15 @@ export function enterScene(sceneId) {
     // Set background
     setBackground(scene.background);
     
-    // Set music
+    // Set music — but don't override 'freedom' with 'suffering' when transitioning
+    // between animal scenes (let the celebratory music carry into the next explore phase)
     if (scene.music) {
-        playMusic(scene.music);
+        if (scene.music === 'suffering' && getCurrentMusic() === 'freedom') {
+            // Freedom is playing — let it continue into this scene's explore phase
+            // It will switch to suffering naturally when the NEXT scene starts (or stays)
+        } else {
+            playMusic(scene.music);
+        }
     }
     
     if (scene.explore && scene.explore.enabled) {

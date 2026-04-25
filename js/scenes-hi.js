@@ -7,7 +7,7 @@ export const SCENES_HI = {
         id: 'prologue',
         title: 'सपना शुरू होता है',
         background: 'maya-room-night',
-        music: 'main-menu',
+        music: 'dream-entrance',
         explore: { enabled: false },
         steps: [
             { type: 'narration', text: "घर में सन्नाटा है। सोती हुई दुनिया की साँसों के अलावा कोई आवाज़ नहीं।" },
