@@ -29,8 +29,9 @@ export function playMusic(trackKey, force = false) {
     isFading = false;
 
     if (audioEl.paused || !currentBgMusic) {
-        // Nothing playing yet — just start it
+        // Nothing playing yet — start it and fade in
         _startTrack(trackSrc, trackKey);
+        _fadeIn();
     } else {
         // Fade out current, then fade in new
         _fadeOut(() => {
