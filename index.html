@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dream of Earth</title>
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Fonts: Quicksand for normal text, Caveat for poetic/titles, Noto Sans Devanagari for Hindi -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Noto+Sans+Devanagari:wght@400;600&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- html2canvas for capturing shareable screenshots -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body class="lang-en">
+    <div id="game-container" class="game-container">
+        
+        <!-- Background Layer -->
+        <div id="background-layer" class="layer background-layer">
+            <img id="scene-bg" src="assets/backgrounds/maya-room-night.webp" alt="Background" onerror="this.outerHTML='<div class=\'placeholder placeholder-bg\'>maya-room-night.webp</div>'">
+        </div>
+        
+        <!-- Phase 1: Explore Layer -->
+        <div id="explore-layer" class="layer explore-layer hidden">
+            <!-- Animals Container (Right Side) -->
+            <div id="explore-animals" class="explore-animals"></div>
+            <!-- Maya Sprite (Video) -->
+            <video id="maya-sprite" class="maya-sprite" src="assets/sprites/maya_idle.webm" muted playsinline autoplay loop></video>
+        </div>
+
+        <!-- Phase 2: Dialogue Characters Layer -->
+        <div id="character-layer" class="layer character-layer hidden">
+            <!-- Character Close-ups appear here -->
+            <img id="maya-image" class="character-image maya-portrait" src="" alt="Maya">
+            <img id="animal-image" class="character-image animal-portrait" src="" alt="Animal">
+        </div>
+        
+        <!-- Lumen Layer (Present in both phases) -->
+        <div id="lumen-layer" class="layer lumen-layer hidden">
+            <div id="lumen" class="lumen lumen--bright"></div>
+        </div>
+
+        <!-- Particles Layer -->
+        <div id="particle-layer" class="layer particle-layer"></div>
+
+        <!-- UI Layer -->
+        <div id="ui-layer" class="layer ui-layer">
+            <!-- Title Screen -->
+            <div id="title-screen" class="title-screen">
+                <!-- Visual background elements -->
+                <video id="title-maya" class="title-maya-anim" src="assets/sprites/maya_idle.webm" muted playsinline autoplay loop></video>
+
+                
+                <h1 class="title">Dream of Earth</h1>
+                <div class="language-selection">
+                    <button class="btn btn-lang" data-lang="en">English</button>
+                    <button class="btn btn-lang hindi-text" data-lang="hi">हिंदी</button>
+                </div>
+                <!-- Start button hidden until a language is selected -->
+                <button id="start-btn" class="btn btn-start hidden">Start Journey</button>
+            </div>
+
+            <!-- Dialogue Box (Bottom) -->
+            <div id="dialogue-box" class="dialogue-box hidden">
+                <div id="speaker-name" class="speaker-name"></div>
+                <div id="dialogue-text" class="dialogue-text"></div>
+                <div id="advance-indicator" class="advance-indicator">▼</div>
+            </div>
+
+            <!-- Choices Container -->
+            <div id="choice-container" class="choice-container hidden">
+                <button class="btn choice-btn choice-compassion" data-index="0"></button>
+                <button class="btn choice-btn choice-partial" data-index="1"></button>
+                <button class="btn choice-btn choice-indifferent" data-index="2"></button>
+            </div>
+            
+            <!-- Credits Screen -->
+            <div id="credits-screen" class="credits-screen hidden">
+                <h2 class="credits-title">Dream of Earth</h2>
+                <div class="credits-content" id="credits-content">
+                    <!-- Dynamic content filled by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Layer (Mobile Only, Explore Phase only) -->
+        <div id="controls-layer" class="layer controls-layer hidden">
+            <button id="btn-left" class="control-btn arrow-left">←</button>
+            <button id="btn-right" class="control-btn arrow-right">→</button>
+        </div>
+
+        <!-- Overlay Layer (Fades, flashes) -->
+        <div id="overlay-layer" class="layer overlay-layer"></div>
+        
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

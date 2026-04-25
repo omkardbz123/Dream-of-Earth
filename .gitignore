@@ -1,0 +1,10 @@
+# Ignore zip files (used for itch.io)
+*.zip
+test-unzip/
+
+# Ignore build script
+build_zip.py
+
+# Ignore system files
+.DS_Store
+Thumbs.db

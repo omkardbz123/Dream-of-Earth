@@ -1,0 +1,753 @@
+/* =========================================
+   VARIABLES & DESIGN SYSTEM
+========================================= */
+:root {
+    /* Colors - Dreamy/Watercolor Palette */
+    --color-bg-dark: #12151e;
+    --color-bg-panel: rgba(20, 25, 35, 0.7);
+    --color-text-main: #f0f4f8;
+    --color-text-accent: #f8e1a5;
+    --color-lumen-glow: rgba(248, 225, 165, 0.7);
+    --color-maya: #e0f2fe;
+    
+    /* Choice Button Colors */
+    --color-btn-compassion: rgba(46, 139, 87, 0.8);
+    --color-btn-partial: rgba(160, 120, 50, 0.8);
+    --color-btn-indifferent: rgba(80, 80, 90, 0.8);
+    --color-btn-hover: rgba(255, 255, 255, 0.2);
+
+    /* Fonts */
+    --font-en-ui: 'Quicksand', sans-serif;
+    --font-en-dialogue: 'Quicksand', sans-serif;
+    --font-en-title: 'Caveat', cursive;
+    --font-hi: 'Noto Sans Devanagari', sans-serif;
+
+    /* Scalable Typography */
+    --text-sm: clamp(0.7rem, 1.2vw, 0.9rem);
+    --text-md: clamp(0.9rem, 1.6vw, 1.15rem);
+    --text-lg: clamp(1.15rem, 2.2vw, 1.35rem);
+    --text-title: clamp(2.5rem, 6vw, 4rem);
+    
+    /* Layout */
+    --panel-border-radius: 12px;
+}
+
+/* Hindi Mode Overrides */
+body.lang-hi {
+    --font-en-ui: var(--font-hi);
+    --font-en-dialogue: var(--font-hi);
+    --font-en-title: var(--font-hi);
+}
+
+/* =========================================
+   RESET & BASE STYLES
+========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-main);
+    font-family: var(--font-en-ui);
+    overflow: hidden; /* No scrolling */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hindi-text {
+    font-family: var(--font-hi);
+}
+
+/* =========================================
+   GAME CONTAINER & LAYERS
+========================================= */
+.game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    max-width: 177.77vh; /* 16:9 Aspect Ratio Lock */
+    max-height: 56.25vw;
+    background-color: #000;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    flex-shrink: 0; /* Prevents flexbox from squishing the container */
+}
+
+.layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Let clicks pass through layers by default */
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none !important;
+    z-index: -1 !important;
+    transition: opacity 0.5s ease;
+}
+
+/* Background */
+.background-layer {
+    z-index: 1;
+}
+
+.background-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 2s ease-in-out;
+}
+
+.placeholder-bg {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2a3a4a, #1a2a3a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* =========================================
+   EXPLORE PHASE SPRITES
+========================================= */
+.explore-layer {
+    z-index: 2;
+}
+
+/* Maya Sprite (Video) */
+.maya-sprite {
+    position: absolute;
+    bottom: 10%;
+    width: 15%;
+    height: 35%;
+    object-fit: contain;
+    background: transparent;
+    border: none;
+    outline: none;
+    transform-origin: bottom center;
+    pointer-events: none;
+}
+
+/* Explore Phase Animals Container */
+.explore-animals {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Animal Sprite Generic Base */
+.animal-sprite {
+    position: absolute;
+    bottom: 10%;
+    width: 30%;
+    height: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: bottom center;
+    transform-origin: bottom center;
+}
+
+.placeholder-sprite {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    color: white;
+    text-align: center;
+}
+
+/* =========================================
+   DIALOGUE PHASE CHARACTERS
+========================================= */
+.character-layer {
+    z-index: 3;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.character-image {
+    position: absolute;
+    bottom: 10%;
+    height: 70%;
+    max-height: 600px;
+    object-fit: contain;
+    transition: opacity 0.5s ease, filter 0.3s ease;
+}
+
+.maya-portrait {
+    left: 10%;
+}
+
+.animal-portrait {
+    right: 10%;
+}
+
+/* Zara is a lying down lioness, so she needs a physically lower anchoring point */
+img.character-image[src*="zara"] {
+    bottom: 2% !important;
+}
+
+.dimmed-char {
+    filter: brightness(0.4);
+    opacity: 0.6;
+}
+
+.character-image.full-screen-char {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.placeholder-char {
+    height: 70%;
+    width: 400px;
+    background: linear-gradient(to top, rgba(200, 170, 100, 0.8), rgba(200, 170, 100, 0.2));
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+    padding: 20px;
+    text-align: center;
+}
+
+/* =========================================
+   LUMEN (FIREFLY)
+========================================= */
+.lumen-layer {
+    z-index: 4;
+}
+
+.lumen {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-image: url('assets/characters/lumen-bright.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* Base fallbacks if image missing */
+    background-color: transparent;
+    border-radius: 50%;
+    
+    /* Animations */
+    animation: lumen-float 3s ease-in-out infinite, lumen-glow 2s ease-in-out infinite;
+    transition: left 2s ease-out, top 2s ease-out, opacity 0.5s ease;
+}
+
+.lumen--dim {
+    background-image: url('assets/characters/lumen-dim.png');
+    opacity: 0.6;
+    animation: lumen-float 3s ease-in-out infinite; /* No glow */
+}
+
+/* If image fails to load, the CSS fallback kicks in */
+.lumen.placeholder-lumen {
+    background-image: none;
+    background: radial-gradient(circle, #fff, #f8e1a5 40%, transparent 70%);
+}
+
+@keyframes lumen-float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes lumen-glow {
+    0%, 100% { filter: drop-shadow(0 0 10px var(--color-lumen-glow)); }
+    50% { filter: drop-shadow(0 0 25px var(--color-lumen-glow)) brightness(1.2); }
+}
+
+/* =========================================
+   UI & OVERLAYS
+========================================= */
+.ui-layer {
+    z-index: 10;
+    pointer-events: auto; /* Catch clicks */
+}
+
+.overlay-layer {
+    z-index: 20;
+    background-color: black;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+/* Title Screen */
+.title-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.5) 0%, rgba(5, 7, 10, 0.95) 100%);
+    z-index: 100;
+    overflow: hidden;
+}
+
+/* Character Visuals on Title Screen */
+.title-maya-anim {
+    position: absolute;
+    left: 2%;
+    bottom: 0%;
+    height: 85%; /* Much larger Maya */
+    filter: brightness(0.7) saturate(0.8);
+    z-index: -1;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+.title-animals {
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
+    width: 35%;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.title-animal {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 80%;
+    filter: grayscale(1) brightness(0.4) contrast(0.8);
+    opacity: 0.8;
+    transition: all 1s ease;
+    animation: simple-breath 4s ease-in-out infinite alternate;
+}
+
+.animal-gaia { 
+    max-width: 450px; /* Make Gaia look large and epic on the right */
+}
+
+@keyframes simple-breath {
+    from { transform: scale(1); opacity: 0.6; }
+    to { transform: scale(1.03); opacity: 0.8; }
+}
+
+.title {
+    font-family: var(--font-en-title);
+    font-size: clamp(2rem, 8vw, 4.5rem); /* Reduced from 12vw/7rem */
+    color: var(--color-text-accent);
+    margin-bottom: 2rem;
+    text-shadow: 0 0 30px rgba(248, 225, 165, 0.4);
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        padding: 0 1rem;
+    }
+    
+    .title-maya-anim {
+        height: 65%; /* Shrink Maya on mobile */
+        left: 0;
+        bottom: 0;
+    }
+
+    .language-selection {
+        gap: 0.5rem;
+    }
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.title {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Dialogue Box */
+.dialogue-box {
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 30%;
+    background: var(--color-bg-panel);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: none;
+    border-radius: var(--panel-border-radius) var(--panel-border-radius) 0 0;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: block; /* Foolproof block to prevent flex/grid collapse */
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.speaker-name {
+    font-family: var(--font-en-title);
+    font-size: var(--text-lg);
+    color: var(--color-text-accent);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.dialogue-text {
+    font-family: var(--font-en-dialogue);
+    font-size: var(--text-md);
+    line-height: 1.5;
+    max-height: 4.5em; /* 3 lines maximum */
+    overflow-y: auto;
+    padding-right: 15px; /* prevent text from overlapping scrollbar */
+    pointer-events: auto; /* ensure scroll interactions work */
+}
+
+/* Custom scrollbar for dialogue text */
+.dialogue-text::-webkit-scrollbar {
+    width: 5px;
+}
+.dialogue-text::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+.dialogue-text::-webkit-scrollbar-thumb {
+    background: var(--color-text-accent);
+    border-radius: 4px;
+}
+
+.advance-indicator {
+    position: absolute;
+    bottom: 1rem;
+    right: 2rem;
+    font-size: var(--text-sm);
+    animation: bounce 1s infinite;
+    color: var(--color-text-accent);
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+}
+
+/* Choices */
+.choice-container {
+    position: absolute;
+    bottom: 35%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 80%;
+    max-width: 600px;
+}
+
+.btn {
+    font-family: var(--font-en-ui);
+    font-size: var(--text-md);
+    padding: 1rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    background: var(--color-bg-panel);
+    backdrop-filter: blur(5px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.btn:hover, .btn:active {
+    background: var(--color-btn-hover);
+    transform: scale(1.02);
+}
+
+.btn-start {
+    margin-top: 2rem;
+    background: rgba(248, 225, 165, 0.2);
+    border-color: var(--color-text-accent);
+    color: var(--color-text-accent);
+    font-size: var(--text-lg);
+    padding: 1rem 3rem;
+    border-radius: 30px;
+}
+
+.language-selection {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-lang {
+    font-size: var(--text-lg);
+    min-width: 120px;
+}
+
+.btn-lang.active {
+    background: rgba(248, 225, 165, 0.3);
+    border-color: var(--color-text-accent);
+}
+
+/* Choice Specific Styling */
+.choice-compassion { background: var(--color-btn-compassion); }
+.choice-partial { background: var(--color-btn-partial); }
+.choice-indifferent { background: var(--color-btn-indifferent); }
+
+.choice-compassion:hover { background: rgba(46, 139, 87, 1); }
+.choice-partial:hover { background: rgba(160, 120, 50, 1); }
+.choice-indifferent:hover { background: rgba(80, 80, 90, 1); }
+
+/* Credits Screen */
+.credits-screen {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 15, 20, 0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.credits-title {
+    font-family: var(--font-en-title);
+    font-size: clamp(1.8rem, 10vw, 3.5rem);
+    color: var(--color-text-accent);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    flex-shrink: 0;
+}
+
+.credits-content {
+    font-family: var(--font-en-ui);
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    flex: 1;
+    justify-content: center;
+}
+
+.credits-ending-badge {
+    color: var(--color-text-accent);
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    margin-bottom: 0.2rem;
+    font-weight: bold;
+}
+
+.credits-ending-text {
+    font-style: italic;
+    color: #cbd5e1;
+    font-size: clamp(0.85rem, 4vw, 1.1rem);
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+
+.score-card {
+    background: rgba(0,0,0,0.4);
+    padding: 1rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.score-label {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-bottom: 0.3rem;
+    letter-spacing: 1px;
+}
+
+.score-value {
+    font-size: clamp(1.1rem, 5vw, 1.5rem);
+    font-weight: bold;
+    color: var(--color-text-accent);
+}
+
+.share-container {
+    margin-top: 1rem;
+    flex-shrink: 0;
+}
+
+@media (max-height: 600px) {
+    .credits-title { font-size: 1.5rem; margin-bottom: 0.2rem; }
+    .credits-content { gap: 0.4rem; }
+    .credits-ending-badge { font-size: 1rem; }
+    .credits-ending-text { font-size: 0.8rem; margin-bottom: 0.5rem; }
+    .score-card { padding: 0.5rem; }
+    .share-container { margin-top: 0.5rem; }
+}
+.btn-share {
+    border: 1px solid var(--color-text-accent);
+    color: var(--color-text-accent);
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-size: var(--text-md);
+    transition: all 0.3s;
+    background: rgba(248, 225, 165, 0.15);
+}
+
+.btn-share:hover {
+    background: var(--color-text-accent);
+    color: #000;
+}
+
+
+
+@keyframes scroll-up {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-150%); }
+}
+
+/* =========================================
+   MOBILE CONTROLS (EXPLORE PHASE)
+========================================= */
+.controls-layer {
+    z-index: 15;
+    pointer-events: auto;
+}
+
+.control-btn {
+    position: absolute;
+    bottom: 10%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    touch-action: none; /* Prevent default browser touch actions */
+}
+
+.control-btn:active {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0.95);
+}
+
+.arrow-left { left: 5%; }
+.arrow-right { left: calc(5% + 70px); }
+
+/* Hide mobile controls on desktop by default unless forced */
+@media (hover: hover) and (pointer: fine) {
+    .controls-layer {
+        display: none !important;
+    }
+}
+
+/* =========================================
+   PARTICLES (MAGIC/TRANSFORM)
+========================================= */
+.particle-layer {
+    z-index: 5;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--color-text-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-text-accent);
+    pointer-events: none;
+    animation: sparkle linear forwards;
+}
+
+@keyframes sparkle {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-100px) scale(0); opacity: 0; }
+}
+
+/* Screen shake */
+.shake {
+    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dialogue-box {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        padding: 1.5rem;
+        height: 40%;
+    }
+
+    .character-image {
+        height: 60%;
+        bottom: 25%;
+    }
+
+    .control-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        bottom: 5%;
+    }
+    .arrow-right { left: calc(5% + 70px); }
+}
+
+/* =========================================
+   FORCE LANDSCAPE IN PORTRAIT MODE
+========================================= */
+@media screen and (orientation: portrait) {
+    /* Instead of warning the user, we literally rotate the entire game! */
+    .game-container {
+        width: 100vh !important;
+        height: 100vw !important;
+        max-width: 177.77vw !important; /* 16:9 aspect lock (16/9 * 100vw) */
+        max-height: 56.25vh !important; /* 16:9 aspect lock (9/16 * 100vh) */
+        transform: rotate(90deg);
+        transform-origin: center center;
+    }
+}
